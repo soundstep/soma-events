@@ -592,7 +592,7 @@ var describe = function(description, specDefinitions) {
 if (isCommonJS) exports.describe = describe;
 
 /**
- * Disables a suite of specifications.  Used to disable some suites in a file, or files, temporarily during development.
+ * Disables a suite of specifications.  Used to disable some specs in a file, or files, temporarily during development.
  *
  * @param {String} description A string, usually the class under test.
  * @param {Function} specDefinitions function that defines several specs.

@@ -9,7 +9,8 @@
 	<script type="text/javascript" src="lib/jasmine-1.2.0.rc3/jasmine.js"></script>
 	<script type="text/javascript" src="lib/jasmine-1.2.0.rc3/jasmine-html.js"></script>
 	<script type="text/javascript" src="lib/utils.js"></script>
-	<script type="text/javascript" src="lib/browser-detect.js"></script>
+    <script type="text/javascript" src="lib/browser-detect.js"></script>
+    <script type="text/javascript" src="lib/require.js"></script>
 
 </head>
 
@@ -17,14 +18,15 @@
 
 </div>
 
-<!-- include source files here... -->
-<script type="text/javascript" src="suites/dispatcher_spec.js"></script>
-<!--[if (gt IE 8)|!(IE)]><!-->
-<script type="text/javascript" src="suites/tests-dom.js"></script>
-<!--<![endif]-->
-
 <!-- include spec files here... -->
 <script type="text/javascript" src="../src/soma-events.js"></script>
+
+<!-- include source files here... -->
+<script type="text/javascript" src="specs/dispatcher_spec.js"></script>
+<!--[if (gt IE 8)|!(IE)]><!-->
+<script type="text/javascript" src="specs/tests-dom.js"></script>
+<!--<![endif]-->
+
 
 <script type="text/javascript">
 	(function () {
