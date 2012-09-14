@@ -1,29 +1,11 @@
-if (!soma) {
-    // load for node.js
-    var soma = require("../../src/soma-events.js");
+// load soma for node.js
+if (typeof soma === 'undefined' && typeof require === "function") {
+    soma = require("../../src/soma-events.js");
 }
 
-describe("infuse.js | test dispatcher", function () {
-
-    var dispatcher,
-        count;
-
-    var empty = emptyHandler.bind(this);
-    var increase = increaseHandler.bind(this);
-    var increase2 = increaseHandler2.bind(this);
-    var fail = failHandler.bind(this);
-    var second = secondHandler.bind(this);
-    var prevent = preventHandler.bind(this);
-
-    beforeEach(function () {
-        dispatcher = new soma.EventDispatcher();
-        count = 0;
-    });
-
-    afterEach(function () {
-        if (dispatcher) dispatcher.dispose();
-        dispatcher = null;
-    });
+describe("soma-events.js | test dispatcher", function () {
+    var dispatcher;
+    var count;
 
     function emptyHandler(event) {
 
@@ -51,7 +33,22 @@ describe("infuse.js | test dispatcher", function () {
         event.preventDefault();
     };
 
-    /* DISPATCHER */
+    var empty = emptyHandler.bind(this);
+    var increase = increaseHandler.bind(this);
+    var increase2 = increaseHandler2.bind(this);
+    var fail = failHandler.bind(this);
+    var second = secondHandler.bind(this);
+    var prevent = preventHandler.bind(this);
+
+    beforeEach(function () {
+        dispatcher = new soma.EventDispatcher();
+        count = 0;
+    });
+
+    afterEach(function () {
+        if (dispatcher) dispatcher.dispose();
+        dispatcher = null;
+    });
 
     it("test_single_create_dispatcher", function () {
         expect(dispatcher).not.toBeNull();
@@ -339,5 +336,3 @@ describe("infuse.js | test dispatcher", function () {
     });
 
 });
-
-//});

@@ -1,22 +1,55 @@
 /*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- * The Original Code is soma-events.js.
- *
- * The Initial Developer of the Original Code is Romuald Quantin
- * romu@soundstep.com (www.soundstep.com)
- *
- * Initial Developer are Copyright (C) 2008-2012 Soundstep. All Rights Reserved.
- */
+Copyright (c) | 2012 | soma-events.js | Romuald Quantin | www.soundstep.com
 
-;
-(function (soma, undefined) {
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
+modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+;(function (soma, undefined) {
 	"use strict";
 
 	soma.events = {};
-	soma.events.version = "0.0.1";
+	soma.events.version = "0.5.0";
+
+    if (!Function.prototype.bind) {
+        Function.prototype.bind = function bind(that) {
+            var target = this;
+            if (typeof target != "function") {
+                throw new Error("Error, you must bind a function.");
+            }
+            var args = Array.prototype.slice.call(arguments, 1); // for normal call
+            var bound = function () {
+                if (this instanceof bound) {
+                    var F = function(){};
+                    F.prototype = target.prototype;
+                    var self = new F;
+                    var result = target.apply(
+                        self,
+                        args.concat(Array.prototype.slice.call(arguments))
+                    );
+                    if (Object(result) === result) {
+                        return result;
+                    }
+                    return self;
+                } else {
+                    return target.apply(
+                        that,
+                        args.concat(Array.prototype.slice.call(arguments))
+                    );
+                }
+            };
+            return bound;
+        };
+    };
 
 	soma.Event = function (type, params, bubbles, cancelable) {
 		var e = soma.Event.createGenericEvent(type, bubbles, cancelable);
@@ -68,10 +101,10 @@
 	soma.Event.createGenericEvent = function (type, bubbles, cancelable) {
 	    var event;
 	    bubbles = bubbles !== undefined ? bubbles : true;
-	    if (document.createEvent) {
+	    if (typeof document === "object" && document.createEvent) {
 		    event = document.createEvent("Event");
 		    event.initEvent(type, !!bubbles, !!cancelable);
-	    } else if (document.createEventObject) {
+	    } else if (typeof document === "object" && document.createEventObject) {
 		    event = document.createEventObject();
 		    event.type = type;
 		    event.bubbles = !!bubbles;
@@ -83,6 +116,7 @@
 	};
 
 	soma.Event.prototype.isIE9 = function() {
+        if (typeof document !== "object") return false;
 	    return document.body.style.scrollbar3dLightColor !== undefined && document.body.style.opacity !== undefined;
     };
 

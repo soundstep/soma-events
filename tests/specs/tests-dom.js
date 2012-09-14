@@ -1,4 +1,4 @@
-describe("infuse.js | test dom", function () {
+describe("soma-events.js | test dom", function () {
 
     var count,
         dispatcher,
@@ -13,18 +13,18 @@ describe("infuse.js | test dom", function () {
     var prevent = preventHandler.bind(this);
 
     beforeEach(function () {
-        dispatcher = document.getElementById("body");
+        dispatcher = document.getElementById("div");
         count = 0;
     });
 
     afterEach(function () {
-        dispatcher.removeEventListener("type", empty);
-        dispatcher.removeEventListener("type", increase);
-        dispatcher.removeEventListener("type", increase2);
-        dispatcher.removeEventListener("type", fail);
-        dispatcher.removeEventListener("type", second);
-        dispatcher.removeEventListener("type", prevent);
-        dispatcher.removeEventListener("other", increase);
+        dispatcher.removeEventListener("type", empty, true);
+        dispatcher.removeEventListener("type", increase, true);
+        dispatcher.removeEventListener("type", increase2, true);
+        dispatcher.removeEventListener("type", fail, true);
+        dispatcher.removeEventListener("type", second, true);
+        dispatcher.removeEventListener("type", prevent, true);
+        dispatcher.removeEventListener("other", increase, true);
         dispatcher = null;
         body = null;
     });
@@ -58,86 +58,86 @@ describe("infuse.js | test dom", function () {
     /* DOM */
 
     it("test_single_add_listener", function () {
-        dispatcher.addEventListener("type", increase);
+        dispatcher.addEventListener("type", increase, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         expect(count).toEqual(1);
     });
 
     it("test_multiple_add_listener", function () {
-        dispatcher.addEventListener("type", increase);
-        dispatcher.addEventListener("type", increase);
-        dispatcher.addEventListener("type", increase);
+        dispatcher.addEventListener("type", increase, true);
+        dispatcher.addEventListener("type", increase, true);
+        dispatcher.addEventListener("type", increase, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         expect(count).toEqual(1);
     });
 
     it("test_add_listener_with_different_type", function () {
-        dispatcher.addEventListener("type", increase);
-        dispatcher.addEventListener("other", increase);
+        dispatcher.addEventListener("type", increase, true);
+        dispatcher.addEventListener("other", increase, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         expect(count).toEqual(1);
     });
 
     it("test_add_listener_with_different_handler", function () {
-        dispatcher.addEventListener("type", increase);
-        dispatcher.addEventListener("type", empty);
+        dispatcher.addEventListener("type", increase, true);
+        dispatcher.addEventListener("type", empty, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         expect(count).toEqual(1);
     });
 
     it("test_single_remove_listener", function () {
-        dispatcher.addEventListener("type", increase);
-        dispatcher.removeEventListener("type", increase);
+        dispatcher.addEventListener("type", increase, true);
+        dispatcher.removeEventListener("type", increase, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         expect(count).toEqual(0);
     });
 
     it("test_multiple_remove_listener", function () {
-        dispatcher.addEventListener("type", increase);
-        dispatcher.addEventListener("type", increase);
-        dispatcher.addEventListener("type", increase);
-        dispatcher.removeEventListener("type", increase);
+        dispatcher.addEventListener("type", increase, true);
+        dispatcher.addEventListener("type", increase, true);
+        dispatcher.addEventListener("type", increase, true);
+        dispatcher.removeEventListener("type", increase, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         expect(count).toEqual(0);
     });
 
     it("test_single_remove_listener_does_not_dispatch", function () {
-        dispatcher.addEventListener("type", fail);
-        dispatcher.removeEventListener("type", fail);
+        dispatcher.addEventListener("type", fail, true);
+        dispatcher.removeEventListener("type", fail, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         expect(count).toEqual(0);
     });
 
     it("test_multiple_remove_listener_does_not_dispatch", function () {
-        dispatcher.addEventListener("type", fail);
-        dispatcher.removeEventListener("type", fail);
-        dispatcher.removeEventListener("type", fail);
+        dispatcher.addEventListener("type", fail, true);
+        dispatcher.removeEventListener("type", fail, true);
+        dispatcher.removeEventListener("type", fail, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         expect(count).toEqual(0);
     });
 
     it("test_remove_listener_with_different_type", function () {
-        dispatcher.addEventListener("type", increase);
-        dispatcher.removeEventListener("other", increase);
+        dispatcher.addEventListener("type", increase, true);
+        dispatcher.removeEventListener("other", increase, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         expect(count).toEqual(1);
     });
 
     it("test_remove_listener_with_different_handler", function () {
-        dispatcher.addEventListener("type", increase);
-        dispatcher.removeEventListener("type", empty);
+        dispatcher.addEventListener("type", increase, true);
+        dispatcher.removeEventListener("type", empty, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         expect(count).toEqual(1);
     });
 
     it("test_single_dispatch", function () {
-        dispatcher.addEventListener("type", increase);
+        dispatcher.addEventListener("type", increase, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         expect(count).toEqual(1);
     });
 
     it("test_multiple_dispatch", function () {
-        dispatcher.addEventListener("type", increase);
+        dispatcher.addEventListener("type", increase, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         dispatcher.dispatchEvent(new soma.Event("type"));
         dispatcher.dispatchEvent(new soma.Event("type"));
@@ -145,8 +145,8 @@ describe("infuse.js | test dom", function () {
     });
 
     it("test_dispatch_with_different_type", function () {
-        dispatcher.addEventListener("type", increase);
-        dispatcher.addEventListener("type", increase2);
+        dispatcher.addEventListener("type", increase, true);
+        dispatcher.addEventListener("type", increase2, true);
         dispatcher.dispatchEvent(new soma.Event("type"));
         dispatcher.dispatchEvent(new soma.Event("other"));
         expect(count).toEqual(2);
@@ -154,14 +154,14 @@ describe("infuse.js | test dom", function () {
 
     it("test_prevent_default_cancelable_true", function () {
         var event = new soma.Event("type", null, false, true);
-        dispatcher.addEventListener("type", prevent);
+        dispatcher.addEventListener("type", prevent, true);
         dispatcher.dispatchEvent(event);
         expect(event.isDefaultPrevented()).toBeTruthy();
     });
 
     it("test_prevent_default_cancelable_false", function () {
         var event = new soma.Event("type", null, false, false);
-        dispatcher.addEventListener("type", prevent);
+        dispatcher.addEventListener("type", prevent, true);
         dispatcher.dispatchEvent(event);
         expect(event.isDefaultPrevented()).toBeFalsy();
     });
@@ -174,9 +174,11 @@ describe("infuse.js | test dom", function () {
 
     it("test_dispatch_prevented_return_false", function () {
         var event = new soma.Event("type", null, true, true);
-        dispatcher.addEventListener("type", prevent);
+        dispatcher.addEventListener("type", prevent, true);
         var result = dispatcher.dispatchEvent(event);
-        if (browser === "Explorer" && version == 9) expect(result).toBeTruthy();
+        if ( (browser === "Explorer" && version == 9) || browser === "Firefox" && version <= 3.6) {
+            expect(result).toBeTruthy();
+        }
         else expect(result).toBeFalsy();
     });
 
@@ -185,7 +187,7 @@ describe("infuse.js | test dom", function () {
         var result = null;
         dispatcher.addEventListener("type", function(event) {
             result = event.params;
-        });
+        }, true);
         dispatcher.dispatchEvent(event);
         expect(result).toEqual("str");
     });
@@ -195,7 +197,7 @@ describe("infuse.js | test dom", function () {
         var result = null;
         dispatcher.addEventListener("type", function(event) {
             result = event.params;
-        });
+        }, true);
         dispatcher.dispatchEvent(event);
         expect(result).toEqual(123);
     });
@@ -205,7 +207,7 @@ describe("infuse.js | test dom", function () {
         var result = null;
         dispatcher.addEventListener("type", function(event) {
             result = event.params;
-        });
+        }, true);
         dispatcher.dispatchEvent(event);
         expect(result).toBeTruthy();
     });
@@ -216,7 +218,7 @@ describe("infuse.js | test dom", function () {
         var result = null;
         dispatcher.addEventListener("type", function(event) {
             result = event.params;
-        });
+        }, true);
         dispatcher.dispatchEvent(event);
         expect(result).toEqual(p);
     });
@@ -227,7 +229,7 @@ describe("infuse.js | test dom", function () {
         var result = null;
         dispatcher.addEventListener("type", function(event) {
             result = event.params;
-        });
+        }, true);
         dispatcher.dispatchEvent(event);
         expect(result).toEqual(p);
     });
@@ -238,7 +240,7 @@ describe("infuse.js | test dom", function () {
         var result = null;
         dispatcher.addEventListener("type", function(event) {
             result = event.params;
-        });
+        }, true);
         dispatcher.dispatchEvent(event);
         expect(result).toEqual(p);
     });
