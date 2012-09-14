@@ -1,0 +1,17 @@
+{
+	"name": "soma-events.js",
+	"author": "Romuald Quantin <romu@soundstep.com> (http://www.soundstep.com)",
+	"description": "Event shim and dispatcher to use the DOM 3 event syntax everywhere",
+	"keywords": ["event", "dispatcher", "dom", "dispatch", "listener", "notification"],
+	"homepage": "https://github.com/soundstep/soma-events.js",
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/soundstep/soma-events.js.git"
+	},
+	"version": "0.0.1",
+	"main": "src/soma-event.js",
+	"devDependencies": {
+		"jasmine-node": "1.0.x",
+		"requirejs": "2.x.x"
+	}
+}
