@@ -9,7 +9,7 @@
 		"url": "http://github.com/soundstep/soma-events.js.git"
 	},
 	"version": "0.5.0",
-	"main": "src/soma-event.js",
+	"main": "src/soma-events.js",
 	"devDependencies": {
 		"jasmine-node": "1.0.x",
 		"requirejs": "2.x.x"
