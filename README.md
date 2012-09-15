@@ -1,9 +1,9 @@
-soma-events.js
+soma-events
 ==============
 
 Event shim and dispatcher to use the DOM 3 event syntax everywhere
 
-Copyright (c) | 2012 | soma-events.js | Romuald Quantin | www.soundstep.com
+Copyright (c) | 2012 | soma-events | Romuald Quantin | www.soundstep.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,

@@ -1,5 +1,5 @@
 /*
-Copyright (c) | 2012 | soma-events.js | Romuald Quantin | www.soundstep.com
+Copyright (c) | 2012 | soma-events | Romuald Quantin | www.soundstep.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -18,7 +18,7 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	"use strict";
 
 	soma.events = {};
-	soma.events.version = "0.5.0";
+	soma.events.version = "0.5.1";
 
     if (!Function.prototype.bind) {
         Function.prototype.bind = function bind(that) {
@@ -210,7 +210,7 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		if (typeof module !== 'undefined' && module.exports) {
 			exports = module.exports = soma;
 		}
-		exports['soma-events'] = soma;
+		exports = soma;
 	};
 
 })(this['soma'] = this['soma'] || {});
