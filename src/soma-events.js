@@ -18,7 +18,7 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	"use strict";
 
 	soma.events = {};
-	soma.events.version = "0.5.1";
+	soma.events.version = "0.5.2";
 
     if (!Function.prototype.bind) {
         Function.prototype.bind = function bind(that) {
@@ -187,9 +187,16 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			return b.priority - a.priority;
 		});
 		for (i = 0; i < events.length; i++) {
-            events[i].listener.apply((event.srcElement) ? event.srcElement : event.currentTarget, [event]);
+			events[i].listener.apply((event.srcElement) ? event.srcElement : event.currentTarget, [event]);
 		}
 		return !event.isDefaultPrevented();
+	};
+
+	soma.EventDispatcher.prototype.dispatch = function(type, params, bubbles, cancelable) {
+		if (!this.listeners || !type || type === "") throw new Error("Error in EventDispatcher (dispatch), one of the parameters is null or undefined.");
+		var event = new soma.Event(type, params, bubbles, cancelable);
+		this.dispatchEvent(event);
+		return event;
 	};
 
 	soma.EventDispatcher.prototype.dispose = function() {

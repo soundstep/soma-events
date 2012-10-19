@@ -335,4 +335,46 @@ describe("soma-events.js | test dispatcher", function () {
         expect(error instanceof Error).toBeTruthy();
     });
 
+	it("test_shortcut_dispatch", function () {
+		dispatcher.addEventListener("type", increase);
+		dispatcher.dispatch("type");
+		expect(count).toEqual(1);
+	});
+
+	it("test_shortcut_multiple_dispatch", function () {
+		dispatcher.addEventListener("type", increase);
+		dispatcher.dispatch("type");
+		dispatcher.dispatch("type");
+		dispatcher.dispatch("type");
+		expect(count).toEqual(3);
+	});
+
+	it("test_shortcut_return_event", function () {
+		var event = dispatcher.dispatch("type");
+		expect(event).not.toBeNull();
+		expect(event).not.toBeUndefined();
+		expect(event.type).toEqual("type");
+	});
+
+	it("test_shortcut_dispatch_params", function () {
+		var result = null;
+		dispatcher.addEventListener("type", function(event) {
+			result = event.params;
+		});
+		dispatcher.dispatch("type", "str");
+		expect(result).toEqual("str");
+	});
+
+	it("test_shortcut_prevent_default_cancelable_true", function () {
+		dispatcher.addEventListener("type", prevent);
+		var event = dispatcher.dispatch("type", null, false, true);
+		expect(event.isDefaultPrevented()).toBeTruthy();
+	});
+
+	it("test_shortcut_prevent_default_cancelable_false", function () {
+		dispatcher.addEventListener("type", prevent);
+		var event = dispatcher.dispatch("type", null, false, false);
+		expect(event.isDefaultPrevented()).toBeFalsy();
+	});
+
 });
