@@ -1,6 +1,0 @@
-{
-	"name": "soma-events",
-	"version": "0.5.2",
-	"main": "./src/soma-events.js",
-	"dependencies": {}
-}

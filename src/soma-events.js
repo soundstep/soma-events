@@ -1,5 +1,5 @@
 /*
-Copyright (c) | 2012 | soma-events | Romuald Quantin | www.soundstep.com
+Copyright (c) | 2013 | soma-events | Romuald Quantin | www.soundstep.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -14,24 +14,26 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRA
 IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-;(function (soma, undefined) {
-	"use strict";
+(function () {
 
+	'use strict';
+
+	var soma = soma || {};
 	soma.events = {};
-	soma.events.version = "0.5.2";
+	soma.events.version = '0.5.3';
 
     if (!Function.prototype.bind) {
         Function.prototype.bind = function bind(that) {
             var target = this;
-            if (typeof target != "function") {
-                throw new Error("Error, you must bind a function.");
+            if (typeof target !== 'function') {
+                throw new Error('Error, you must bind a function.');
             }
             var args = Array.prototype.slice.call(arguments, 1); // for normal call
             var bound = function () {
                 if (this instanceof bound) {
                     var F = function(){};
                     F.prototype = target.prototype;
-                    var self = new F;
+                    var self = new F();
                     var result = target.apply(
                         self,
                         args.concat(Array.prototype.slice.call(arguments))
@@ -49,7 +51,7 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             };
             return bound;
         };
-    };
+    }
 
 	soma.Event = function (type, params, bubbles, cancelable) {
 		var e = soma.Event.createGenericEvent(type, bubbles, cancelable);
@@ -63,7 +65,9 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		if (this.isIE9() || !e.preventDefault || (e.getDefaultPrevented === undefined && e.defaultPrevented === undefined )) {
 			e.preventDefault = this.preventDefault.bind(e);
 		}
-		if (this.isIE9()) e.IE9PreventDefault = false;
+		if (this.isIE9()) {
+			e.IE9PreventDefault = false;
+		}
 		return e;
 	};
 
@@ -74,19 +78,27 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		e.clone = this.clone;
 		e.isDefaultPrevented = this.isDefaultPrevented;
 		e.isIE9 = this.isIE9;
-		if (this.isIE9()) e.IE9PreventDefault = this.IE9PreventDefault;
+		if (this.isIE9()) {
+			e.IE9PreventDefault = this.IE9PreventDefault;
+		}
 		return e;
 	};
 
 	soma.Event.prototype.preventDefault = function () {
-		if (!this.cancelable) return false;
+		if (!this.cancelable) {
+			return false;
+		}
 		this.defaultPrevented = true;
-		if (this.isIE9()) this.IE9PreventDefault = true;
+		if (this.isIE9()) {
+			this.IE9PreventDefault = true;
+		}
 		return this;
 	};
 
 	soma.Event.prototype.isDefaultPrevented = function () {
-		if (!this.cancelable) return false;
+		if (!this.cancelable) {
+			return false;
+		}
 		if (this.isIE9()) {
 			return this.IE9PreventDefault;
 		}
@@ -99,38 +111,40 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	};
 
 	soma.Event.createGenericEvent = function (type, bubbles, cancelable) {
-	    var event;
-	    bubbles = bubbles !== undefined ? bubbles : true;
-	    if (typeof document === "object" && document.createEvent) {
-		    event = document.createEvent("Event");
-		    event.initEvent(type, !!bubbles, !!cancelable);
-	    } else if (typeof document === "object" && document.createEventObject) {
-		    event = document.createEventObject();
-		    event.type = type;
-		    event.bubbles = !!bubbles;
-		    event.cancelable = !!cancelable;
-	    } else {
-		    event = new EventObject(type, !!bubbles, !!cancelable);
-	    }
-	    return event;
+		var event;
+		bubbles = bubbles !== undefined ? bubbles : true;
+		if (typeof document === 'object' && document.createEvent) {
+			event = document.createEvent('Event');
+			event.initEvent(type, !!bubbles, !!cancelable);
+		} else if (typeof document === 'object' && document.createEventObject) {
+			event = document.createEventObject();
+			event.type = type;
+			event.bubbles = !!bubbles;
+			event.cancelable = !!cancelable;
+		} else {
+			event = new EventObject(type, !!bubbles, !!cancelable);
+		}
+		return event;
 	};
 
 	soma.Event.prototype.isIE9 = function() {
-        if (typeof document !== "object") return false;
-	    return document.body.style.scrollbar3dLightColor !== undefined && document.body.style.opacity !== undefined;
+        if (typeof document !== 'object') {
+			return false;
+        }
+		return document.body.style.scrollbar3dLightColor !== undefined && document.body.style.opacity !== undefined;
     };
 
 	soma.Event.prototype.toString = function() {
-		return "[soma.Event]";
+		return '[soma.Event]';
 	};
 
 	var EventObject = function(type, bubbles, cancelable) {
 		this.type = type;
-	    this.bubbles = !!bubbles;
-	    this.cancelable = !!cancelable;
+		this.bubbles = !!bubbles;
+		this.cancelable = !!cancelable;
 		this.defaultPrevented = false;
-	    this.currentTarget = null;
-	    this.target = null;
+		this.currentTarget = null;
+		this.target = null;
 	};
 
 	soma.EventDispatcher = function () {
@@ -138,8 +152,12 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	};
 
 	soma.EventDispatcher.prototype.addEventListener = function(type, listener, priority) {
-		if (!this.listeners || !type || !listener) return;
-		if (isNaN(priority)) priority = 0;
+		if (!this.listeners || !type || !listener) {
+			return;
+		}
+		if (isNaN(priority)) {
+			priority = 0;
+		}
 		for (var i=0; i<this.listeners.length; i++) {
 			var eventObj = this.listeners[i];
 			if (eventObj.type === type && eventObj.listener === listener) {
@@ -150,7 +168,9 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	};
 
 	soma.EventDispatcher.prototype.removeEventListener = function(type, listener) {
-		if (!this.listeners || !type || !listener) return;
+		if (!this.listeners || !type || !listener) {
+			return;
+		}
 		var i = this.listeners.length;
 		while(i-- > 0) {
 			var eventObj = this.listeners[i];
@@ -161,7 +181,9 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	};
 
 	soma.EventDispatcher.prototype.hasEventListener = function(type) {
-		if (!this.listeners || !type) return false;
+		if (!this.listeners || !type) {
+			return false;
+		}
 		var i = 0;
 		var l = this.listeners.length;
 		for (; i < l; ++i) {
@@ -174,7 +196,9 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	};
 
 	soma.EventDispatcher.prototype.dispatchEvent = function(event) {
-		if (!this.listeners || !event) throw new Error("Error in EventDispatcher (dispatchEvent), one of the parameters is null or undefined.");
+		if (!this.listeners || !event) {
+			throw new Error('Error in EventDispatcher (dispatchEvent), one of the parameters is null or undefined.');
+		}
 		var events = [];
 		var i;
 		for (i = 0; i < this.listeners.length; i++) {
@@ -193,7 +217,9 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	};
 
 	soma.EventDispatcher.prototype.dispatch = function(type, params, bubbles, cancelable) {
-		if (!this.listeners || !type || type === "") throw new Error("Error in EventDispatcher (dispatch), one of the parameters is null or undefined.");
+		if (!this.listeners || !type || type === '') {
+			throw new Error('Error in EventDispatcher (dispatch), one of the parameters is null or undefined.');
+		}
 		var event = new soma.Event(type, params, bubbles, cancelable);
 		this.dispatchEvent(event);
 		return event;
@@ -204,21 +230,22 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	};
 
 	soma.EventDispatcher.prototype.toString = function() {
-		return "[soma.EventDispatcher]";
+		return '[soma.EventDispatcher]';
 	};
 
 	// register for AMD module
-	if (typeof define === 'function' && define.amd) {
-		define("soma-events", soma);
-	};
+	/* globals define:false */
+	if (typeof define === 'function' && typeof define.amd !== 'undefined') {
+		define('soma-events', soma);
+	}
 
 	// export for node.js
-	if (typeof exports !== 'undefined') {
-		if (typeof module !== 'undefined' && module.exports) {
-			exports = module.exports = soma;
-		}
-		exports = soma;
-	};
+	if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+		module.exports = soma;
+	}
+	else {
+		window.soma = soma;
+	}
 
-})(this['soma'] = this['soma'] || {});
+})();
 
