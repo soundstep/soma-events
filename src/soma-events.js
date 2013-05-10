@@ -19,7 +19,7 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	'use strict';
 
 	soma.events = {};
-	soma.events.version = '0.5.4';
+	soma.events.version = '0.5.5';
 
     if (!Function.prototype.bind) {
         Function.prototype.bind = function bind(that) {
@@ -233,14 +233,16 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	};
 
 	// register for AMD module
-	/* globals define:false */
 	if (typeof define === 'function' && typeof define.amd !== 'undefined') {
-		define('soma-events', soma);
+		define("soma-events", soma);
 	}
 
 	// export for node.js
 	if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 		module.exports = soma;
+	}
+	if (typeof exports !== 'undefined') {
+		exports = soma;
 	}
 
 })(this['soma'] = this['soma'] || {});
