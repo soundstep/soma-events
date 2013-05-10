@@ -8,7 +8,7 @@
 		"type": "git",
 		"url": "http://github.com/soundstep/soma-events.git"
 	},
-	"version": "0.5.3",
+	"version": "0.5.4",
 	"main": "src/soma-events.js",
 	"devDependencies": {
 		"grunt": ">=0.4.x",

@@ -14,13 +14,12 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRA
 IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function () {
+(function (soma) {
 
 	'use strict';
 
-	var soma = soma || {};
 	soma.events = {};
-	soma.events.version = '0.5.3';
+	soma.events.version = '0.5.4';
 
     if (!Function.prototype.bind) {
         Function.prototype.bind = function bind(that) {
@@ -243,9 +242,6 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 		module.exports = soma;
 	}
-	else {
-		window.soma = soma;
-	}
 
-})();
+})(this['soma'] = this['soma'] || {});
 
