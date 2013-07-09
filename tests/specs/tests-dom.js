@@ -176,7 +176,7 @@ describe("soma-events.js | test dom", function () {
         var event = new soma.Event("type", null, true, true);
         dispatcher.addEventListener("type", prevent, true);
         var result = dispatcher.dispatchEvent(event);
-        if ( (browser === "Explorer" && version == 9) || browser === "Firefox" && version <= 3.6) {
+        if ( (browser === "Explorer" && version == 9) || (browser === "Explorer" && version == 10) || browser === "Firefox" && version <= 3.6) {
             expect(result).toBeTruthy();
         }
         else expect(result).toBeFalsy();
